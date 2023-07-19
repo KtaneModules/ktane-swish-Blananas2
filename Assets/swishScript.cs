@@ -106,10 +106,10 @@ public class swishScript : MonoBehaviour {
         cards[c][0] = orientations[a][cards[c][0]];
         cards[c][1] = orientations[a][cards[c][1]];
         givenSolution[c] += ((givenSolution[c].Length != 0 ? ", " : "") + controlNames[a]);
-        StartCoroutine(AnimateReorientation(c, a));
+        StartCoroutine(AnimateReorientation(c, a, false));
     }
 
-    IEnumerator AnimateReorientation(int c, int a) {
+    IEnumerator AnimateReorientation(int c, int a, bool f) {
         animating = true;
         float elapsed = 0f;
         float duration = 0.1f;
@@ -123,12 +123,18 @@ public class swishScript : MonoBehaviour {
             }
             CardObjs[c].transform.localRotation = startRotation;
         } else { //flip
-            while (elapsed < duration) {
-                CardObjs[c].transform.localScale = new Vector3((a == 3 ? (-elapsed*20f) + 1f : 1f), 1f, (a == 2 ? (-elapsed*20f) + 1f : 1f));
-                yield return null;
-                elapsed += Time.deltaTime;
+            for (int r = 0; r < 2; r++) {
+                while (elapsed < ((r == 0) ? duration/2 : duration)) {
+                    CardObjs[c].transform.localScale = new Vector3((a == 3 ? (-elapsed*20f) + 1f : 1f), 1f, (a == 2 ? (-elapsed*20f) + 1f : 1f));
+                    yield return null;
+                    elapsed += Time.deltaTime;
+                }
+                if (r == 0) {
+                    if (f) { GeneratePuzzle(); }
+                } else {
+                    CardObjs[c].transform.localScale = new Vector3(1f, 1f, 1f);
+                }
             }
-            CardObjs[c].transform.localScale = new Vector3(1f, 1f, 1f);
         }
         DrawCards();
         if (!timerRanOut) { animating = false; }
@@ -181,20 +187,14 @@ public class swishScript : MonoBehaviour {
             timerRanOut = false;
             timerStarted = false;
             for (int y = 0; y < 4; y++) {
-                StartCoroutine(AnimateReorientation(y, (coinFlip ? 2 : 3)));
+                StartCoroutine(AnimateReorientation(y, (coinFlip ? 2 : 3), true));
             }
-            for (int k = 0; k < 2; k++) {
-                duration += 0.05f;
-                while (elapsed < duration) {
-                    yield return null;
-                    elapsed += Time.deltaTime;
-                }
-                if (k == 0) {
-                    GeneratePuzzle();
-                } else {
-                    ControlObj.SetActive(true);
-                }
+            duration += 0.1f;
+            while (elapsed < duration) {
+                yield return null;
+                elapsed += Time.deltaTime;
             }
+            ControlObj.SetActive(true);
         }
     }
 
