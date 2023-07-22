@@ -208,6 +208,7 @@ public class swishScript : MonoBehaviour {
             Debug.LogFormat("[Swish #{0}] That is a valid Swish, module solved.", moduleId);
             GetComponent<KMBombModule>().HandlePass();
             moduleSolved = true;
+            Audio.PlaySoundAtTransform("solve", transform);
         } else {
             Debug.LogFormat("[Swish #{0}] That is not a valid Swish, strike!", moduleId);
             GetComponent<KMBombModule>().HandleStrike();
