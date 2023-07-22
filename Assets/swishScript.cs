@@ -56,18 +56,18 @@ public class swishScript : MonoBehaviour {
     }
 
     void GeneratePuzzle() {
-        for (int w = 0; w < 4; w++) {
+        for (int z = 0; z < 4; z++) {
             do { 
-                cards[w][0] = Rnd.Range(0, 16); 
-            } while (cards[w][0] == cards[(w+1)%4][0] || cards[w][0] == cards[(w+2)%4][0] || cards[w][0] == cards[(w+3)%4][0]);
-            cards[(w+1)%4][1] = cards[w][0];
+                cards[z][0] = Rnd.Range(0, 16); 
+            } while (cards[z][0] == cards[(z+1)%4][0] || cards[z][0] == cards[(z+2)%4][0] || cards[z][0] == cards[(z+3)%4][0]);
+            cards[(z+1)%4][1] = cards[z][0];
         }
         cards.Shuffle();
-        for (int x = 0; x < 4; x++) {
+        for (int z = 0; z < 4; z++) {
             int o = Rnd.Range(0, 8);
-            cards[x][0] = orientations[o][cards[x][0]];
-            cards[x][1] = orientations[o][cards[x][1]];
-            possibleSolution[x] = solutionNames[o];
+            cards[z][0] = orientations[o][cards[z][0]];
+            cards[z][1] = orientations[o][cards[z][1]];
+            possibleSolution[z] = solutionNames[o];
         }
 
         Debug.LogFormat("[Swish #{0}] Cards: {1},{2} {3},{4} {5},{6} {7},{8}", moduleId, cards[0][0], cards[0][1], cards[1][0], cards[1][1], cards[2][0], cards[2][1], cards[3][0], cards[3][1]);
@@ -76,22 +76,22 @@ public class swishScript : MonoBehaviour {
     }
 
     void DrawCards() {
-        for (int d = 0; d < 4; d++) {
+        for (int z = 0; z < 4; z++) {
             for (int s = 0; s < 16; s++) {
-                SpriteSlots[d*16+s].sprite = Sprites[2];
+                SpriteSlots[z*16+s].sprite = Sprites[2];
             }
-            SpriteSlots[d*16 + cards[d][0]].sprite = Sprites[0];
-            SpriteSlots[d*16 + cards[d][1]].sprite = Sprites[1];
+            SpriteSlots[z*16 + cards[z][0]].sprite = Sprites[0];
+            SpriteSlots[z*16 + cards[z][1]].sprite = Sprites[1];
         }
     }
 
     void ControlPress(KMSelectable Control) {
-        for (int i = 0; i < 16; i++) {
-            if (Controls[i] == Control) {
+        for (int s = 0; s < 16; s++) {
+            if (Controls[s] == Control) {
                 if (timerRanOut || moduleSolved) { return; }
-                animq.Add(i);
+                animq.Add(s);
                 if (animating) { return; }
-                ReorientCard(i);
+                ReorientCard(s);
                 if (!timerStarted) {
                     timerStarted = true;
                     StartCoroutine(Timer());
@@ -100,9 +100,9 @@ public class swishScript : MonoBehaviour {
         }
     }
 
-    void ReorientCard(int v) {
-        int c = v/4;
-        int a = v%4;
+    void ReorientCard(int s) {
+        int c = s/4;
+        int a = s%4;
         cards[c][0] = orientations[a][cards[c][0]];
         cards[c][1] = orientations[a][cards[c][1]];
         givenSolution[c] += ((givenSolution[c].Length != 0 ? ", " : "") + controlNames[a]);
@@ -160,22 +160,22 @@ public class swishScript : MonoBehaviour {
         }
     }
 
-    IEnumerator ComeTogether(int z) {
+    IEnumerator ComeTogether(int f) {
         float elapsed = 0f;
         float duration = 0.5f;
-        float multiplier = 0.07f * z;
+        float multiplier = 0.07f * f;
         bool coinFlip = Rnd.Range(0, 2) == 0;
         while (elapsed < duration) {
-            CardObjs[0].transform.localPosition = new Vector3((z == 1 ? -0.045f : -0.01f) + (elapsed*multiplier), 0f, (z == 1 ? 0.025f : -0.01f) - (elapsed*multiplier));
-            CardObjs[1].transform.localPosition = new Vector3((z == 1 ? 0.025f : -0.01f) - (elapsed*multiplier), 0f, (z == 1 ? 0.025f : -0.01f) - (elapsed*multiplier));
-            CardObjs[2].transform.localPosition = new Vector3((z == 1 ? -0.045f : -0.01f) + (elapsed*multiplier), 0f, (z == 1 ? -0.045f : -0.01f) + (elapsed*multiplier));
-            CardObjs[3].transform.localPosition = new Vector3((z == 1 ? 0.025f : -0.01f) - (elapsed*multiplier), 0f, (z == 1 ? -0.045f : -0.01f) + (elapsed*multiplier));
+            CardObjs[0].transform.localPosition = new Vector3((f == 1 ? -0.045f : -0.01f) + (elapsed*multiplier), 0f, (f == 1 ? 0.025f : -0.01f) - (elapsed*multiplier));
+            CardObjs[1].transform.localPosition = new Vector3((f == 1 ? 0.025f : -0.01f) - (elapsed*multiplier), 0f, (f == 1 ? 0.025f : -0.01f) - (elapsed*multiplier));
+            CardObjs[2].transform.localPosition = new Vector3((f == 1 ? -0.045f : -0.01f) + (elapsed*multiplier), 0f, (f == 1 ? -0.045f : -0.01f) + (elapsed*multiplier));
+            CardObjs[3].transform.localPosition = new Vector3((f == 1 ? 0.025f : -0.01f) - (elapsed*multiplier), 0f, (f == 1 ? -0.045f : -0.01f) + (elapsed*multiplier));
             yield return null;
             elapsed += Time.deltaTime;
         }
-        if (z == 1) {
-            for (int y = 0; y < 4; y++) { 
-                CardObjs[y].transform.localPosition = new Vector3(-0.01f, 0f, -0.01f);
+        if (f == 1) {
+            for (int z = 0; z < 4; z++) { 
+                CardObjs[z].transform.localPosition = new Vector3(-0.01f, 0f, -0.01f);
             }
             CheckAnswer();
         } else {
@@ -186,8 +186,8 @@ public class swishScript : MonoBehaviour {
             animating = false;
             timerRanOut = false;
             timerStarted = false;
-            for (int y = 0; y < 4; y++) {
-                StartCoroutine(AnimateReorientation(y, (coinFlip ? 2 : 3), true));
+            for (int z = 0; z < 4; z++) {
+                StartCoroutine(AnimateReorientation(z, (coinFlip ? 2 : 3), true));
             }
             duration += 0.1f;
             while (elapsed < duration) {
@@ -212,8 +212,8 @@ public class swishScript : MonoBehaviour {
         } else {
             Debug.LogFormat("[Swish #{0}] That is not a valid Swish, strike!", moduleId);
             GetComponent<KMBombModule>().HandleStrike();
+            for (int z = 0; z < 4; z++) { givenSolution[z] = ""; }
             StartCoroutine(WaitASec());
-            //Come apart method and generate new puzzle (maybe add parameter to come together instead which inverts multiplier)
         }
     }
 
