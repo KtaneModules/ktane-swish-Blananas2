@@ -1,2 +1,16 @@
-Replace this with a JSON generated at ktane.timwi.de (see Tools -> Create new module)
-Don't forget to add Tags to the description that describe what your module LOOKS LIKE to be able to find it in the list from the defuser's description.
+{
+  "Author": "Blananas2",
+  "Compatibility": "Compatible",
+  "DefuserDifficulty": "Easy",
+  "Description": "Correctly orient cards before a timer runs out. Tags: 4-cards, 4-balls, 4-hoops",
+  "ExpertDifficulty": "Easy",
+  "ModuleID": "swish",
+  "Name": "Swish",
+  "Origin": "Mods",
+  "Published": "2023-07-23",
+  "SortKey": "SWISH",
+  "SourceUrl": "https://github.com/Blananas2/ktane-swish",
+  "SteamID": "3008897252",
+  "Symbol": "Swh",
+  "Type": "Regular"
+}

@@ -14,15 +14,9 @@ MonoBehaviour:
   id: swish
   title: Swish
   author: Blananas2
-  description: 'Flavor text here
-
-
-    Module by Blananas2
-
-
-    Module ID: swish
-
-    The manual can be found here: https://ktane.timwi.de/HTML/Swish.html'
+  description: "Insert n\u2022nsense phrase here\n\nCreated for the 5th KTANE Modding
+    Jam (Three sentence manual)\n\nModule by Blananas2\n\nModule ID: swish\nThe manual
+    can be found here: https://ktane.timwi.de/HTML/Swish.html"
   version: 
   outputFolder: build
-  previewImage: {fileID: 0}
+  previewImage: {fileID: 2800000, guid: ed63554d052df1d4ea7690bc7cd51d19, type: 3}
