@@ -130,7 +130,7 @@ public class swishScript : MonoBehaviour {
                     elapsed += Time.deltaTime;
                 }
                 if (r == 0) {
-                    if (f) { GeneratePuzzle(); }
+                    if (f && c == 0) { GeneratePuzzle(); }
                 } else {
                     CardObjs[c].transform.localScale = new Vector3(1f, 1f, 1f);
                 }
