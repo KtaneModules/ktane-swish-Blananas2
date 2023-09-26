@@ -255,6 +255,7 @@ public class swishScript : MonoBehaviour
         else
         {
             Debug.LogFormat("[Swish #{0}] That is not a valid Swish, strike!", moduleId);
+            GetComponent<KMBombModule>().HandleStrike();
             for (int z = 0; z < 4; z++) { givenSolution[z] = ""; }
             StartCoroutine(WaitASec());
         }
