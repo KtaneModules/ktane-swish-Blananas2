@@ -290,17 +290,16 @@ public class swishScript : MonoBehaviour
         for (int i = 0; i < inputs.Length; i++)
         {
             var m = Regex.Match(inputs[i], @"^\s*(?<card>TL|TR|BL|BR)\s+(?<action>(W\s*|C\s*|V\s*|H\s*)+)\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-            if (m.Success)
+            if (!m.Success)
+                yield break;
+            var cards = new string[] { "tl", "tr", "bl", "br" };
+            int cardIx = Array.IndexOf(cards, m.Groups["card"].Value);
+            foreach (var move in m.Groups["action"].Value)
             {
-                var cards = new string[] { "tl", "tr", "bl", "br" };
-                int cardIx = Array.IndexOf(cards, m.Groups["card"].Value);
-                foreach (var move in m.Groups["action"].Value)
-                {
-                    int moveIx = "wcvh ".IndexOf(move);
-                    if (moveIx == 4)
-                        continue;
-                    list.Add(Controls[cardIx * 4 + moveIx]);
-                }
+                int moveIx = "wcvh ".IndexOf(move);
+                if (moveIx == 4)
+                    continue;
+                list.Add(Controls[cardIx * 4 + moveIx]);
             }
         }
         yield return null;
